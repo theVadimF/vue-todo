@@ -1,0 +1,25 @@
+import { defineStore } from "pinia";
+import { ref } from "vue";
+
+export const useTaskStore = defineStore("tasks", () => {
+  const tasks = ref({});
+  const id = ref(0);
+
+  function addTask(taskName: string) {
+    let completed: boolean = false;
+    let name = taskName;
+    let taskId = id.value++;
+  }
+
+  function removeTask(taskId: number) {
+  }
+
+  function editTask(taskId: number, taskName: string) {
+  }
+
+  function toggleDone(taskId: number) {
+
+  }
+
+  return { tasks, addTask, removeTask, editTask, toggleDone }
+})
