@@ -1,6 +1,6 @@
 <template>
-  <div class="task_list" v-for="(item, id) in store.tasks">
-    <TaskItem :taskName="item.name" :id="id" :taskCompleted="item.completed" />
+  <div class="task_list">
+    <TaskItem v-for="(item, id) in store.tasks" :taskName="item.name" :id="id" :taskCompleted="item.completed" />
   </div>
 </template>
 
@@ -13,6 +13,9 @@ const store = useTaskStore();
 
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.task_list {
+  display: flex;
+  flex-direction: column;
+}
 </style>
