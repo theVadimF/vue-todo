@@ -1,7 +1,7 @@
 <template>
   <div class="form_wrap">
     <input type="text" class="form_input" v-model="formInput" placeholder="Название задачи" @keydown.enter="addTask">
-    <button class="form_add" @click="addTask" :disabled="formInput.replaceAll(' ', '').length == 0">
+    <button class="form_add" @click="addTask" :disabled="formInput.replaceAll(' ', '').length === 0">
       <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#fff" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z"/></svg>
     </button>
   </div>

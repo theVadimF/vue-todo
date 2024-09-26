@@ -19,5 +19,6 @@ const store = useTaskStore();
   flex-direction: column;
   gap: 5px;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 </style>

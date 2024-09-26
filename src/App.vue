@@ -17,6 +17,8 @@ import '@fontsource/roboto/700.css';
 </template>
 
 <style scoped lang="scss">
+@use "./mixins";
+
 .content_wrap {
   max-width: 800px;
   margin-left: auto;
@@ -39,7 +41,12 @@ import '@fontsource/roboto/700.css';
   font-family: "Roboto", sans-serif;
   font-size: 36px;
   font-weight: 600;
-  margin-top: 40px;
-  margin-bottom: 10px;
+  padding-top: 40px;
+  padding-bottom: 10px;
+
+  @include mixins.respond-to(mobile) {
+    font-size: 26px;
+    padding-top: 20px;
+  }
 }
 </style>

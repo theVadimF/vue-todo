@@ -25,9 +25,9 @@
         <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#fff" d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z"/></svg>
       </label>
     </div>
-    <input type="text" v-model="edited_name" class="edit_input">
+    <input type="text" v-model="edited_name" class="edit_input" @keydown.enter="saveChanges" @keydown.esc="toggleEditMode" ref="editor_element">
     <div class="controls">
-      <button @click="saveChanges" class="ctl_btn">
+      <button @click="saveChanges" class="ctl_btn" :disabled="edited_name.replaceAll(' ', '').length === 0">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><path fill="#43a047" d="M40.6 12.1L17 35.7l-9.6-9.6L4.6 29L17 41.3l26.4-26.4z"/></svg>
       </button>
       <button @click="toggleEditMode" class="ctl_btn">
@@ -38,21 +38,30 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, defineExpose, watch } from 'vue'
 import { useTaskStore } from '../stores/taskStore.ts'
 
 const store = useTaskStore();
 const edit_mode: Ref<boolean> = ref(false);
-const edited_name: Ref<string> = ref("")
+const edited_name: Ref<string> = ref("");
+const editor_element: Ref<HTMLInputElement | null> = ref(null);
 
 const toggleEditMode = () => {
   edited_name.value = props.taskName;
   edit_mode.value = !edit_mode.value;
 }
 
+watch(editor_element, () => {
+  if (edit_mode && editor_element.value) {
+    editor_element.value.focus();
+  }
+})
+
 const saveChanges = () => {
-  store.editTask(props.id, edited_name);
-  edit_mode.value = false;
+  if (edited_name.value.replaceAll(' ', '').length > 0) {
+    store.editTask(props.id, edited_name);
+    edit_mode.value = false;
+  }
 }
 
 const props = defineProps({
@@ -61,9 +70,12 @@ const props = defineProps({
   taskName: String
 })
 
+defineExpose({ editor_element });
+
 </script>
 
 <style lang="scss" scoped>
+@use '../mixins';
 .task_item {
   display: flex;
   width: 100%;
@@ -93,10 +105,20 @@ const props = defineProps({
     }
   }
 
+  @include mixins.respond-to(mobile) {
+    display: grid;
+    grid-template-columns: 23px 1fr;
+    border-radius: 15px;
+  }
 
   .controls {
     display: flex;
     gap: 5px;
+
+    @include mixins.respond-to(mobile) {
+      grid-column: 2;
+      justify-content: flex-end;
+    }
   }
 
   .ctl_btn {
@@ -109,10 +131,18 @@ const props = defineProps({
     border-radius: 100%;
     height: 24px;
     width: 24px;
+    padding: 3px;
     transition: background 0.2s;
 
     &:hover {
       background: rgba($color: #fff, $alpha: 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      &:hover {
+        background: none;
+      }
     }
   }
 
@@ -123,6 +153,11 @@ const props = defineProps({
     color: #fff;
     padding: 0px 10px;
     border-radius: 25px;
+    outline: none;
+
+    &:focus {
+      outline: 1px solid #fff;
+    }
   }
 
 
@@ -156,8 +191,5 @@ const props = defineProps({
     }
   }
 }
-
-
-
 
 </style>
