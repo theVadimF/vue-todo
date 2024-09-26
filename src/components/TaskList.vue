@@ -17,5 +17,7 @@ const store = useTaskStore();
 .task_list {
   display: flex;
   flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
 }
 </style>
